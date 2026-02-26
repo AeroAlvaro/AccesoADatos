@@ -25,5 +25,5 @@ public class Socio {
     private Taquilla taquilla;
 
     @OneToMany(mappedBy = "socio", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Reserva> reservas;
+    private List<Reserva> reservas = new java.util.ArrayList<>();
 }

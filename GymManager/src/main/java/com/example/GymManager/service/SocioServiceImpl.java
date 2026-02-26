@@ -49,10 +49,15 @@ public class SocioServiceImpl implements SocioService {
         socioExistente.setEmail(socioDTO.getEmail());
 
         if (socioDTO.getTaquilla() != null) {
-            Taquilla taquilla = new Taquilla();
-            taquilla.setNumero(socioDTO.getTaquilla().getNumero());
-            taquilla.setEstado(socioDTO.getTaquilla().isEstado());
-            socioExistente.setTaquilla(taquilla);
+            if (socioExistente.getTaquilla() != null) {
+                socioExistente.getTaquilla().setNumero(socioDTO.getTaquilla().getNumero());
+                socioExistente.getTaquilla().setEstado(socioDTO.getTaquilla().isEstado());
+            } else {
+                Taquilla nuevaTaquilla = new Taquilla();
+                nuevaTaquilla.setNumero(socioDTO.getTaquilla().getNumero());
+                nuevaTaquilla.setEstado(socioDTO.getTaquilla().isEstado());
+                socioExistente.setTaquilla(nuevaTaquilla);
+            }
         }
 
         Socio socioActualizado = socioRepository.save(socioExistente);
@@ -105,5 +110,21 @@ public class SocioServiceImpl implements SocioService {
         }
 
         return socio;
+    }
+
+    @Override
+    public SocioDTO añadirReserva(Long socioId, ReservaDTO reservaDTO) {
+        Socio socio = socioRepository.findById(socioId)
+                .orElseThrow(() -> new RuntimeException("Socio no encontrado con ID: " + socioId));
+
+        Reserva reserva = new Reserva();
+        reserva.setActividad(reservaDTO.getActividad());
+        reserva.setFechaHora(reservaDTO.getFechaHora());
+        reserva.setSocio(socio);
+
+        socio.getReservas().add(reserva);
+
+        Socio socioActualizado = socioRepository.save(socio);
+        return convertirADTO(socioActualizado);
     }
 }

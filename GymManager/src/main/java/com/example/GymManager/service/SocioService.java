@@ -1,5 +1,6 @@
 package com.example.GymManager.service;
 
+import com.example.GymManager.dto.ReservaDTO;
 import com.example.GymManager.dto.SocioDTO;
 import java.util.List;
 
@@ -9,4 +10,5 @@ public interface SocioService {
     SocioDTO guardarSocio(SocioDTO socioDTO);
     SocioDTO actualizarSocio(Long id, SocioDTO socioDTO);
     void eliminarSocio(Long id);
+    SocioDTO añadirReserva(Long socioId, ReservaDTO reservaDTO);
 }

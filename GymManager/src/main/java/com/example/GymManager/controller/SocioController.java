@@ -1,7 +1,9 @@
 package com.example.GymManager.controller;
 
+import com.example.GymManager.dto.ReservaDTO;
 import com.example.GymManager.dto.SocioDTO;
 import com.example.GymManager.service.SocioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,12 +33,12 @@ public class SocioController {
     }
 
     @PostMapping
-    public ResponseEntity<SocioDTO> guardarSocio(@RequestBody SocioDTO socioDTO) {
+    public ResponseEntity<SocioDTO> guardarSocio(@Valid @RequestBody SocioDTO socioDTO) {
         return new ResponseEntity<>(socioService.guardarSocio(socioDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SocioDTO> actualizarSocio(@PathVariable Long id, @RequestBody SocioDTO socioDTO) {
+    public ResponseEntity<SocioDTO> actualizarSocio(@PathVariable Long id, @Valid @RequestBody SocioDTO socioDTO) {
         return ResponseEntity.ok(socioService.actualizarSocio(id, socioDTO));
     }
 
@@ -44,5 +46,10 @@ public class SocioController {
     public ResponseEntity<Void> eliminarSocio(@PathVariable Long id) {
         socioService.eliminarSocio(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/reservas")
+    public ResponseEntity<SocioDTO> añadirReserva(@PathVariable Long id, @Valid @RequestBody ReservaDTO reservaDTO) {
+        return new ResponseEntity<>(socioService.añadirReserva(id, reservaDTO), HttpStatus.CREATED);
     }
 }
